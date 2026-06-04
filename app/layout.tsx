@@ -1,15 +1,21 @@
-import { Geist, Geist_Mono, Inter } from "next/font/google"
+import type { Metadata } from "next"
+import { Geist_Mono, Noto_Sans_Thai } from "next/font/google"
 
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils";
+import { SiteHeader } from "@/components/site-header"
+import { cn } from "@/lib/utils"
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'})
+const notoSansThai = Noto_Sans_Thai({ subsets: ["thai", "latin"], variable: "--font-sans" })
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
 })
+
+export const metadata: Metadata = {
+  title: "BPR Service - ศูนย์บริการแอร์คุณภาพ",
+  description: "ราคารวมติดตั้ง ประหยัดไฟ รับประกัน บริการโดยช่างมืออาชีพ",
+}
 
 export default function RootLayout({
   children,
@@ -18,12 +24,17 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", inter.variable)}
+      lang="th"
+      className={cn(
+        "antialiased",
+        fontMono.variable,
+        "font-sans",
+        notoSansThai.variable
+      )}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <SiteHeader />
+        {children}
       </body>
     </html>
   )

@@ -1,19 +1,20 @@
-import { Button } from "@/components/ui/button"
+import { getBrands, getHomePage } from "@/lib/strapi"
+import { Hero } from "@/components/home/hero"
+import { BrandGrid } from "@/components/home/brand-grid"
+import { FeatureCards } from "@/components/home/feature-cards"
 
-export default function Page() {
+// CMS-driven content rendered at request time (not prerendered at build).
+export const dynamic = "force-dynamic"
+
+export default async function HomePage() {
+  const [home, brands] = await Promise.all([getHomePage(), getBrands()])
+  console.log(home)
+
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
-    </div>
+    <main>
+      <Hero home={home} />
+      <BrandGrid brands={brands} />
+      <FeatureCards features={home?.features} />
+    </main>
   )
 }
