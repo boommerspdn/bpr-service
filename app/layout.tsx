@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Geist_Mono, Noto_Sans_Thai } from "next/font/google"
 
 import "./globals.css"
+import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { getHomePage } from "@/lib/strapi"
 import { cn } from "@/lib/utils"
@@ -36,8 +37,11 @@ export default async function RootLayout({
       )}
     >
       <body>
-        <SiteHeader logo={home?.logo} />
-        {children}
+        <div className="flex min-h-svh flex-col">
+          <SiteHeader logo={home?.logo} />
+          <div className="flex-1">{children}</div>
+          <SiteFooter home={home} />
+        </div>
       </body>
     </html>
   )
