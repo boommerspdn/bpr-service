@@ -1,4 +1,4 @@
-import type { EcoGrade, UnitType } from "@/lib/types"
+import type { Brand, EcoGrade, UnitType } from "@/lib/types"
 
 /** Product detail subtitle label per unit type. */
 export const UNIT_TYPE_LABEL: Record<UnitType, string> = {
@@ -18,12 +18,45 @@ export const ECO_GRADE_STARS: Record<EcoGrade, number> = {
 }
 
 /** The four service types shown on brand cards (conditionally by brand flags). */
-export const SERVICE_TYPES: { key: UnitType; label: string; icon: string }[] = [
-  { key: "wall_unit", label: "แอร์ติดผนัง", icon: "/types/Wall.png" },
-  { key: "floor_unit", label: "แอร์ตั้งพื้น", icon: "/types/floor.png" },
-  { key: "ceiling_cassette", label: "แอร์ฝังฝ้า (Cassette)", icon: "/types/ceiling.png" },
-  { key: "hanging_unit", label: "แอร์แขวน", icon: "/types/cassette.png" },
+export const SERVICE_TYPES: {
+  key: UnitType
+  label: string
+  icon: string
+}[] = [
+  {
+    key: "wall_unit",
+    label: "แอร์ติดผนัง (Wall Type)",
+    icon: "/types/Wall.png",
+  },
+  {
+    key: "floor_unit",
+    label: "แอร์ตั้งพื้น (Floor Type)",
+    icon: "/types/floor.png",
+  },
+  {
+    key: "ceiling_cassette",
+    label: "แอร์ฝังฝ้า (Cassette)",
+    icon: "/types/ceiling.png",
+  },
+  {
+    key: "hanging_unit",
+    label: "แอร์แขวน (Hanging Type)",
+    icon: "/types/cassette.png",
+  },
 ]
+
+export const BRAND_UNIT_TYPE_FLAGS: Record<UnitType, keyof Brand> = {
+  wall_unit: "wallUnit",
+  floor_unit: "floorUnit",
+  ceiling_cassette: "ceilingCassette",
+  hanging_unit: "hangingUnit",
+}
+
+export function getActiveServiceTypes(brand: Brand) {
+  return SERVICE_TYPES.filter(
+    ({ key }) => brand[BRAND_UNIT_TYPE_FLAGS[key]] === true
+  )
+}
 
 /** Top navigation items. Non-home routes are placeholder pages for now. */
 export const NAV_ITEMS: { label: string; href: string }[] = [

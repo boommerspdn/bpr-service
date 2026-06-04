@@ -7,6 +7,7 @@ import type {
   Product,
   StrapiListResponse,
   StrapiSingleResponse,
+  UnitType,
 } from "@/lib/types"
 
 /**
@@ -70,6 +71,24 @@ export const getProductsByBrand = cache(
     const res = await strapiFetch<StrapiListResponse<Product>>(
       `/bprservice-products?filters[brand][documentId][$eq]=${encodeURIComponent(
         brandDocumentId
+      )}&populate=image&populate=specs&pagination[pageSize]=100`,
+      { data: [], meta: {} }
+    )
+    return res.data
+  }
+)
+
+/** Products belonging to a brand and AC unit type. */
+export const getProductsByBrandAndUnitType = cache(
+  async (
+    brandDocumentId: string,
+    unitType: UnitType
+  ): Promise<Product[]> => {
+    const res = await strapiFetch<StrapiListResponse<Product>>(
+      `/bprservice-products?filters[brand][documentId][$eq]=${encodeURIComponent(
+        brandDocumentId
+      )}&filters[unitType][$eq]=${encodeURIComponent(
+        unitType
       )}&populate=image&populate=specs&pagination[pageSize]=100`,
       { data: [], meta: {} }
     )
