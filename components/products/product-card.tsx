@@ -3,6 +3,7 @@ import Link from "next/link"
 
 import { UNIT_TYPE_LABEL } from "@/lib/constants"
 import { mediaUrl, toMediaArray } from "@/lib/media"
+import { productRouteParam } from "@/lib/strapi"
 import type { Product } from "@/lib/types"
 import { Card } from "@/components/ui/card"
 
@@ -14,7 +15,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <Link
-      href={`/products/${product.slug}`}
+      href={`/products/${productRouteParam(product)}`}
       className="group rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
       <Card className="h-full gap-0 overflow-hidden p-0 transition-colors group-hover:border-primary/40">

@@ -19,7 +19,7 @@ export function BrandCard({ brand }: { brand: Brand }) {
 
   return (
     <Link
-      href={`/products?brand=${brand.id}`}
+      href={`/brands/${brand.documentId}`}
       className="group rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
       <Card className="flex h-full flex-row items-center gap-4 p-5 transition-colors group-hover:border-primary/40 group-hover:bg-accent/40">

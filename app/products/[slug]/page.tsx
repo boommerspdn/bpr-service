@@ -4,12 +4,20 @@ import { ChevronLeft } from "lucide-react"
 
 import { UNIT_TYPE_LABEL } from "@/lib/constants"
 import { mediaUrl, toMediaArray } from "@/lib/media"
-import { getProductBySlug } from "@/lib/strapi"
+import {
+  getProductByRouteParam,
+  getProducts,
+  productRouteParam,
+} from "@/lib/strapi"
 import { ProductGallery } from "@/components/products/product-gallery"
 import { SpecsTable } from "@/components/products/specs-table"
 
-// Slug content is CMS-driven; render at request time.
-export const dynamic = "force-dynamic"
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+  const products = await getProducts()
+  return products.map((product) => ({ slug: productRouteParam(product) }))
+}
 
 interface ProductDetailPageProps {
   params: Promise<{ slug: string }>
@@ -19,7 +27,7 @@ export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
   const { slug } = await params
-  const product = await getProductBySlug(slug)
+  const product = await getProductByRouteParam(slug)
 
   if (!product) notFound()
 
@@ -31,10 +39,10 @@ export default async function ProductDetailPage({
     : undefined
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+    <main className="container py-8">
       {product.brand && (
         <Link
-          href={`/products?brand=${product.brand.id}`}
+          href={`/brands/${product.brand.documentId}`}
           className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
         >
           <ChevronLeft className="size-4" />
@@ -46,9 +54,7 @@ export default async function ProductDetailPage({
         <h1 className="text-2xl font-bold tracking-tight text-primary sm:text-3xl">
           {product.name}
         </h1>
-        {subtitle && (
-          <p className="mt-1 text-muted-foreground">{subtitle}</p>
-        )}
+        {subtitle && <p className="mt-1 text-muted-foreground">{subtitle}</p>}
       </div>
 
       <div className="mx-auto mt-6 max-w-xl">

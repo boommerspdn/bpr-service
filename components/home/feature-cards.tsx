@@ -68,14 +68,12 @@ export function FeatureCards({ features }: { features?: Feature[] }) {
 
   return (
     <section className="bg-muted/40">
-      <div className="mx-auto grid max-w-6xl gap-4 px-4 py-12 sm:px-6 md:grid-cols-3 md:py-16">
+      <div className="container grid gap-4 py-12 md:grid-cols-3 md:py-16">
         {hasFeatures
           ? features.map((feature) => (
               <CmsCard key={feature.id} feature={feature} />
             ))
-          : FALLBACK.map((card) => (
-              <FallbackCard key={card.title} {...card} />
-            ))}
+          : FALLBACK.map((card) => <FallbackCard key={card.title} {...card} />)}
       </div>
     </section>
   )

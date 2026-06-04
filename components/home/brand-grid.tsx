@@ -4,7 +4,7 @@ import { BrandCard } from "@/components/home/brand-card"
 export function BrandGrid({ brands }: { brands: Brand[] }) {
   return (
     <section id="brands" className="scroll-mt-20">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-16">
+      <div className="container py-12 md:py-16">
         {brands.length === 0 ? (
           <p className="text-center text-muted-foreground">
             ยังไม่มีข้อมูลแบรนด์

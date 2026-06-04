@@ -1,6 +1,6 @@
 export default function ContactPage() {
   return (
-    <main className="mx-auto flex min-h-[50svh] max-w-6xl items-center justify-center px-4 py-16 sm:px-6">
+    <main className="container flex min-h-[50svh] items-center justify-center py-16">
       <h1 className="text-3xl font-bold tracking-tight">ติดต่อเรา</h1>
     </main>
   )

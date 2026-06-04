@@ -3,6 +3,7 @@ import { Geist_Mono, Noto_Sans_Thai } from "next/font/google"
 
 import "./globals.css"
 import { SiteHeader } from "@/components/site-header"
+import { getHomePage } from "@/lib/strapi"
 import { cn } from "@/lib/utils"
 
 const notoSansThai = Noto_Sans_Thai({ subsets: ["thai", "latin"], variable: "--font-sans" })
@@ -17,11 +18,13 @@ export const metadata: Metadata = {
   description: "ราคารวมติดตั้ง ประหยัดไฟ รับประกัน บริการโดยช่างมืออาชีพ",
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const home = await getHomePage()
+
   return (
     <html
       lang="th"
@@ -33,7 +36,7 @@ export default function RootLayout({
       )}
     >
       <body>
-        <SiteHeader />
+        <SiteHeader logo={home?.logo} />
         {children}
       </body>
     </html>

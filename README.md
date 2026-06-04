@@ -1,8 +1,49 @@
-# Next.js template
+# BPR Service
 
-This is a Next.js template with shadcn/ui.
+Static-exported Next.js site backed by Strapi content, styled with Tailwind CSS
+and shadcn/ui components.
 
-## Adding components
+## Local Development
+
+Create `.env` from `.env.example` and point it at Strapi:
+
+```bash
+NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
+STRAPI_TOKEN=your-strapi-api-token-here
+```
+
+Run the app:
+
+```bash
+npm run dev
+```
+
+## Static Export
+
+This app is configured with `output: "export"`. `next build` writes static
+HTML and assets to `out/`.
+
+```bash
+npm run build
+```
+
+Important constraints:
+
+- Strapi must be reachable during the build.
+- Dynamic pages must be enumerable with `generateStaticParams()`.
+- Strapi media URLs must remain browser-accessible after deployment, unless you
+  mirror media separately.
+
+## Deploy To Apache Over SCP
+
+Set the destination to your VPS Apache document root, then build and copy `out/`:
+
+```bash
+export STATIC_DEPLOY_TARGET='user@example.com:/var/www/html/'
+npm run deploy:static
+```
+
+## Adding shadcn/ui Components
 
 To add components to your app, run the following command:
 
@@ -17,5 +58,5 @@ This will place the ui components in the `components` directory.
 To use the components in your app, import them as follows:
 
 ```tsx
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 ```

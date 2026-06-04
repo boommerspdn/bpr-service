@@ -40,7 +40,7 @@ async function strapiFetch<T>(path: string, fallback: T): Promise<T> {
 /** Homepage singleton: hero + feature cards. */
 export const getHomePage = cache(async (): Promise<HomePage | null> => {
   const res = await strapiFetch<StrapiSingleResponse<HomePage>>(
-    "/bprservice-home-page?populate[heroImage]=true&populate[features][populate]=icon",
+    "/bprservice-home-page?populate[logo]=true&populate[heroImage]=true&populate[features][populate]=icon",
     { data: null, meta: {} }
   )
   return res.data
@@ -55,10 +55,10 @@ export const getBrands = cache(async (): Promise<Brand[]> => {
   return res.data
 })
 
-/** A single brand by numeric id (for the product list heading). */
-export const getBrand = cache(async (id: string): Promise<Brand | null> => {
+/** A single brand by Strapi documentId (for the product list heading). */
+export const getBrand = cache(async (documentId: string): Promise<Brand | null> => {
   const res = await strapiFetch<StrapiSingleResponse<Brand>>(
-    `/bprservice-brands/${id}?populate=logo`,
+    `/bprservice-brands/${encodeURIComponent(documentId)}?populate=logo`,
     { data: null, meta: {} }
   )
   return res.data
@@ -66,22 +66,37 @@ export const getBrand = cache(async (id: string): Promise<Brand | null> => {
 
 /** Products belonging to a brand. */
 export const getProductsByBrand = cache(
-  async (brandId: string): Promise<Product[]> => {
+  async (brandDocumentId: string): Promise<Product[]> => {
     const res = await strapiFetch<StrapiListResponse<Product>>(
-      `/bprservice-products?filters[brand][id][$eq]=${brandId}&populate=image&populate=specs&pagination[pageSize]=100`,
+      `/bprservice-products?filters[brand][documentId][$eq]=${encodeURIComponent(
+        brandDocumentId
+      )}&populate=image&populate=specs&pagination[pageSize]=100`,
       { data: [], meta: {} }
     )
     return res.data
   }
 )
 
-/** A single product by its slug (UUID). Returns the first match or null. */
-export const getProductBySlug = cache(
-  async (slug: string): Promise<Product | null> => {
+/** All products, used to enumerate static export paths. */
+export const getProducts = cache(async (): Promise<Product[]> => {
+  const res = await strapiFetch<StrapiListResponse<Product>>(
+    "/bprservice-products?populate=image&populate=brand.logo&populate=specs&pagination[pageSize]=1000",
+    { data: [], meta: {} }
+  )
+  return res.data
+})
+
+/** Stable static route param for product pages. */
+export function productRouteParam(product: Product): string {
+  return product.slug || product.documentId
+}
+
+/** A single product by route param. Accepts either slug or documentId. */
+export const getProductByRouteParam = cache(
+  async (param: string): Promise<Product | null> => {
+    const encodedParam = encodeURIComponent(param)
     const res = await strapiFetch<StrapiListResponse<Product>>(
-      `/bprservice-products?filters[slug][$eq]=${encodeURIComponent(
-        slug
-      )}&populate=image&populate=brand.logo&populate=specs`,
+      `/bprservice-products?filters[$or][0][slug][$eq]=${encodedParam}&filters[$or][1][documentId][$eq]=${encodedParam}&populate=image&populate=brand.logo&populate=specs`,
       { data: [], meta: {} }
     )
     return res.data[0] ?? null

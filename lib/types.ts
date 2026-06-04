@@ -31,7 +31,11 @@ export interface StrapiListResponse<T> {
   }
 }
 
-export type UnitType = "wall_unit" | "floor_unit" | "ceiling_cassette" | "hanging_unit"
+export type UnitType =
+  | "wall_unit"
+  | "floor_unit"
+  | "ceiling_cassette"
+  | "hanging_unit"
 
 export type EcoGrade =
   | "5_5stars"
@@ -66,7 +70,7 @@ export interface Product {
   id: number
   documentId: string
   /** Server-injected UUID, used as the route param. */
-  slug: string
+  slug?: string | null
   name: string
   unitType?: UnitType | null
   /** One image per the API map; may arrive as an array if multiple. */
@@ -85,9 +89,12 @@ export interface Feature {
 export interface HomePage {
   id: number
   documentId: string
+  logo?: StrapiMedia | null
   heroTitle?: string | null
   heroSubtitle?: string | null
   ctaLabel?: string | null
+  lineId?: string | null
+  phoneNumber?: string | null
   heroImage?: StrapiMedia | null
   features?: Feature[]
 }
