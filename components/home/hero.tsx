@@ -40,7 +40,7 @@ function FeatureItem({
   icon: LucideIcon
 }) {
   return (
-    <li className="flex min-w-0 items-center gap-3 text-sm font-medium text-slate-700 sm:text-base lg:text-xl">
+    <li className="flex min-w-0 items-center gap-3 text-sm font-medium text-slate-500 sm:text-base lg:text-xl">
       <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-sky-100/60 text-primary shadow-sm ring-1 ring-primary/10">
         <Icon className="size-6" strokeWidth={1.9} aria-hidden />
       </span>
