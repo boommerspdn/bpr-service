@@ -1,9 +1,9 @@
 import Image from "next/image"
+import type React from "react"
 import { Leaf, ShieldCheck, Wrench, type LucideIcon } from "lucide-react"
 
 import { mediaUrl } from "@/lib/media"
 import type { Feature } from "@/lib/types"
-import { Card } from "@/components/ui/card"
 
 /** Static fallback cards mirroring the mockup when the CMS has no features. */
 const FALLBACK: { title: string; description: string; icon: LucideIcon }[] = [
@@ -28,52 +28,106 @@ function FallbackCard({
   title,
   description,
   icon: Icon,
-}: (typeof FALLBACK)[number]) {
+  separated,
+}: (typeof FALLBACK)[number] & { separated?: boolean }) {
   return (
-    <Card className="flex flex-col items-center gap-3 p-6 text-center">
-      <span className="flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
-        <Icon className="size-7" aria-hidden />
-      </span>
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <p className="text-sm text-muted-foreground">{description}</p>
-    </Card>
+    <FeatureItem
+      title={title}
+      description={description}
+      icon={<Icon className="size-8" aria-hidden />}
+      framedIcon
+      separated={separated}
+    />
   )
 }
 
-function CmsCard({ feature }: { feature: Feature }) {
+function CmsCard({
+  feature,
+  separated,
+}: {
+  feature: Feature
+  separated?: boolean
+}) {
   const icon = mediaUrl(feature.icon)
   return (
-    <Card className="flex flex-col items-center gap-3 p-6 text-center">
-      <span className="flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
-        {icon && (
+    <FeatureItem
+      title={feature.title}
+      description={feature.description}
+      icon={
+        icon && (
           <Image
             src={icon}
             alt=""
-            width={28}
-            height={28}
-            className="object-contain"
+            width={64}
+            height={64}
+            className="size-14 object-contain md:size-16"
           />
-        )}
-      </span>
-      <h3 className="text-lg font-semibold">{feature.title}</h3>
-      {feature.description && (
-        <p className="text-sm text-muted-foreground">{feature.description}</p>
-      )}
-    </Card>
+        )
+      }
+      separated={separated}
+    />
   )
 }
 
-export function FeatureCards({ features }: { features?: Feature[] }) {
-  const hasFeatures = features && features.length > 0
-
+function FeatureItem({
+  title,
+  description,
+  icon,
+  framedIcon,
+  separated,
+}: {
+  title: string
+  description?: string | null
+  icon?: React.ReactNode
+  framedIcon?: boolean
+  separated?: boolean
+}) {
   return (
-    <section className="bg-muted/40">
-      <div className="container grid gap-4 py-12 md:grid-cols-3 md:py-16">
-        {hasFeatures
-          ? features.map((feature) => (
-              <CmsCard key={feature.id} feature={feature} />
-            ))
-          : FALLBACK.map((card) => <FallbackCard key={card.title} {...card} />)}
+    <div
+      className={`flex min-h-20 items-center gap-4 px-5 py-4 md:px-8 ${
+        separated ? "border-t border-primary/15 md:border-t-0 md:border-l" : ""
+      }`}
+    >
+      <span
+        className={`flex size-14 shrink-0 items-center justify-center rounded-full text-primary md:size-16 ${
+          framedIcon ? "border-2 border-primary bg-white shadow-sm" : ""
+        }`}
+      >
+        {icon}
+      </span>
+      <div className="min-w-0 space-y-1">
+        <h3 className="text-xl leading-tight font-bold text-primary md:text-2xl">
+          {title}
+        </h3>
+        {description && (
+          <p className="text-sm leading-snug text-slate-500 md:text-[15px]">
+            {description}
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function renderFeatureCards(features?: Feature[]) {
+  if (features && features.length > 0) {
+    return features.map((feature, index) => (
+      <CmsCard key={feature.id} feature={feature} separated={index > 0} />
+    ))
+  }
+
+  return FALLBACK.map((card, index) => (
+    <FallbackCard key={card.title} {...card} separated={index > 0} />
+  ))
+}
+
+export function FeatureCards({ features }: { features?: Feature[] }) {
+  return (
+    <section className="bg-white py-8 md:py-10">
+      <div className="container">
+        <div className="grid overflow-hidden rounded-lg bg-[#edf6ff] shadow-sm ring-1 ring-primary/5 md:grid-cols-3">
+          {renderFeatureCards(features)}
+        </div>
       </div>
     </section>
   )
