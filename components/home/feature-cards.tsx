@@ -84,23 +84,23 @@ function FeatureItem({
 }) {
   return (
     <div
-      className={`flex min-h-20 items-center gap-4 px-5 py-4 md:px-8 ${
-        separated ? "border-t border-primary/15 md:border-t-0 md:border-l" : ""
+      className={`flex min-h-20 items-center gap-4 px-5 py-4 sm:px-6 lg:min-h-36 lg:gap-5 lg:px-6 xl:px-8 ${
+        separated ? "border-t border-primary/15 lg:border-t-0 lg:border-l" : ""
       }`}
     >
       <span
-        className={`flex size-14 shrink-0 items-center justify-center rounded-full text-primary md:size-16 ${
-          framedIcon ? "border-2 border-primary bg-white shadow-sm" : ""
+        className={`flex size-14 shrink-0 items-center justify-center rounded-full text-primary sm:size-16 ${
+          framedIcon ? "border-2 border-primary bg-white" : ""
         }`}
       >
         {icon}
       </span>
       <div className="min-w-0 space-y-1">
-        <h3 className="text-xl leading-tight font-bold text-primary md:text-2xl">
+        <h3 className="text-xl leading-tight font-bold text-primary sm:text-2xl lg:text-[1.35rem] xl:text-2xl">
           {title}
         </h3>
         {description && (
-          <p className="text-sm leading-snug text-slate-500 md:text-[15px]">
+          <p className="text-sm leading-snug text-slate-500 sm:text-[15px]">
             {description}
           </p>
         )}
@@ -125,7 +125,7 @@ export function FeatureCards({ features }: { features?: Feature[] }) {
   return (
     <section className="bg-white py-8 md:py-10">
       <div className="container">
-        <div className="grid overflow-hidden rounded-lg bg-[#edf6ff] shadow-sm ring-1 ring-primary/5 md:grid-cols-3">
+        <div className="grid overflow-hidden rounded-lg bg-[#edf6ff] ring-1 ring-primary/5 lg:grid-cols-3">
           {renderFeatureCards(features)}
         </div>
       </div>
