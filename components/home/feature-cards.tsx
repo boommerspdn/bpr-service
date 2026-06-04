@@ -123,7 +123,7 @@ function renderFeatureCards(features?: Feature[]) {
 
 export function FeatureCards({ features }: { features?: Feature[] }) {
   return (
-    <section className="bg-white py-8 md:py-10">
+    <section className="bg-white pt-0 pb-12 md:pb-16">
       <div className="container">
         <div className="grid overflow-hidden rounded-lg bg-[#edf6ff] ring-1 ring-primary/5 lg:grid-cols-3">
           {renderFeatureCards(features)}
