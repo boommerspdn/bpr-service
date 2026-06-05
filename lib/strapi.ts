@@ -14,10 +14,10 @@ import type {
  * Fetch a path under the Strapi API root and parse JSON.
  * Uncached by default (Next 16) — data is CMS-driven and may change.
  * On failure (network error or non-2xx, e.g. a 403 before public-role
- * permissions are set) it logs and returns `fallback` so pages can render
- * their empty states instead of crashing.
+ * permissions are set) it logs and returns null so callers can render honest
+ * empty states instead of crashing or showing demo content.
  */
-async function strapiFetch<T>(path: string, fallback: T): Promise<T> {
+async function strapiFetch<T>(path: string): Promise<T | null> {
   try {
     const res = await fetch(`${API_URL}${path}`, {
       headers: {
@@ -28,53 +28,55 @@ async function strapiFetch<T>(path: string, fallback: T): Promise<T> {
 
     if (!res.ok) {
       console.warn(`Strapi request failed (${res.status}): ${path}`)
-      return fallback
+      return null
     }
 
     return (await res.json()) as T
   } catch (error) {
     console.warn(`Strapi request error: ${path}`, error)
-    return fallback
+    return null
   }
+}
+
+async function fetchSingle<T>(path: string): Promise<T | null> {
+  const res = await strapiFetch<StrapiSingleResponse<T>>(path)
+  return res?.data ?? null
+}
+
+async function fetchList<T>(path: string): Promise<T[]> {
+  const res = await strapiFetch<StrapiListResponse<T>>(path)
+  return res?.data ?? []
 }
 
 /** Homepage singleton: hero + feature cards. */
 export const getHomePage = cache(async (): Promise<HomePage | null> => {
-  const res = await strapiFetch<StrapiSingleResponse<HomePage>>(
-    "/bprservice-home-page?populate[logo]=true&populate[heroImage]=true&populate[features][populate]=icon",
-    { data: null, meta: {} }
+  return fetchSingle<HomePage>(
+    "/bprservice-home-page?populate[logo]=true&populate[heroImage]=true&populate[features][populate]=icon"
   )
-  return res.data
 })
 
 /** All brands for the homepage grid, sorted by name. */
 export const getBrands = cache(async (): Promise<Brand[]> => {
-  const res = await strapiFetch<StrapiListResponse<Brand>>(
-    "/bprservice-brands?populate=logo&pagination[pageSize]=100&sort=name:asc",
-    { data: [], meta: {} }
+  return fetchList<Brand>(
+    "/bprservice-brands?populate=logo&pagination[pageSize]=100&sort=name:asc"
   )
-  return res.data
 })
 
 /** A single brand by Strapi documentId (for the product list heading). */
 export const getBrand = cache(async (documentId: string): Promise<Brand | null> => {
-  const res = await strapiFetch<StrapiSingleResponse<Brand>>(
-    `/bprservice-brands/${encodeURIComponent(documentId)}?populate=logo`,
-    { data: null, meta: {} }
+  return fetchSingle<Brand>(
+    `/bprservice-brands/${encodeURIComponent(documentId)}?populate=logo`
   )
-  return res.data
 })
 
 /** Products belonging to a brand. */
 export const getProductsByBrand = cache(
   async (brandDocumentId: string): Promise<Product[]> => {
-    const res = await strapiFetch<StrapiListResponse<Product>>(
+    return fetchList<Product>(
       `/bprservice-products?filters[brand][documentId][$eq]=${encodeURIComponent(
         brandDocumentId
-      )}&populate=image&populate=specs&pagination[pageSize]=100`,
-      { data: [], meta: {} }
+      )}&populate=image&populate=specs&pagination[pageSize]=100`
     )
-    return res.data
   }
 )
 
@@ -84,25 +86,21 @@ export const getProductsByBrandAndUnitType = cache(
     brandDocumentId: string,
     unitType: UnitType
   ): Promise<Product[]> => {
-    const res = await strapiFetch<StrapiListResponse<Product>>(
+    return fetchList<Product>(
       `/bprservice-products?filters[brand][documentId][$eq]=${encodeURIComponent(
         brandDocumentId
       )}&filters[unitType][$eq]=${encodeURIComponent(
         unitType
-      )}&populate=image&populate=specs&pagination[pageSize]=100`,
-      { data: [], meta: {} }
+      )}&populate=image&populate=specs&pagination[pageSize]=100`
     )
-    return res.data
   }
 )
 
 /** All products, used to enumerate static export paths. */
 export const getProducts = cache(async (): Promise<Product[]> => {
-  const res = await strapiFetch<StrapiListResponse<Product>>(
-    "/bprservice-products?populate=image&populate=brand.logo&populate=specs&pagination[pageSize]=1000",
-    { data: [], meta: {} }
+  return fetchList<Product>(
+    "/bprservice-products?populate=image&populate=brand.logo&populate=specs&pagination[pageSize]=1000"
   )
-  return res.data
 })
 
 /** Stable static route param for product pages. */
@@ -114,10 +112,9 @@ export function productRouteParam(product: Product): string {
 export const getProductByRouteParam = cache(
   async (param: string): Promise<Product | null> => {
     const encodedParam = encodeURIComponent(param)
-    const res = await strapiFetch<StrapiListResponse<Product>>(
-      `/bprservice-products?filters[$or][0][slug][$eq]=${encodedParam}&filters[$or][1][documentId][$eq]=${encodedParam}&populate=image&populate=brand.logo&populate=specs`,
-      { data: [], meta: {} }
+    const products = await fetchList<Product>(
+      `/bprservice-products?filters[$or][0][slug][$eq]=${encodedParam}&filters[$or][1][documentId][$eq]=${encodedParam}&populate=image&populate=brand.logo&populate=specs`
     )
-    return res.data[0] ?? null
+    return products[0] ?? null
   }
 )

@@ -1,6 +1,5 @@
 import { Star } from "lucide-react"
 
-import { ECO_GRADE_STARS } from "@/lib/constants"
 import type { EcoGrade } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -42,4 +41,12 @@ export function StarRating({
       ))}
     </div>
   )
+}
+
+const ECO_GRADE_STARS: Record<EcoGrade, number> = {
+  "5_5stars": 5,
+  "5_4stars": 4,
+  "5_3stars": 3,
+  "5_2stars": 2,
+  "5_1star": 1,
 }

@@ -1,4 +1,3 @@
-import { formatBaht } from "@/lib/constants"
 import type { Spec } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { StarRating } from "@/components/star-rating"
@@ -67,4 +66,9 @@ export function SpecsTable({ specs }: { specs: Spec[] }) {
       </Table>
     </div>
   )
+}
+
+function formatBaht(value: number | null | undefined): string {
+  if (value == null) return "-"
+  return value.toLocaleString("th-TH")
 }

@@ -4,54 +4,16 @@ import { ShieldCheck, Snowflake, Wrench, type LucideIcon } from "lucide-react"
 import { mediaUrl } from "@/lib/media"
 import type { HomePage } from "@/lib/types"
 
-type Contact = {
+type HeroContact = {
   icon: string
   label: string
   className: string
   textClassName: string
 }
 
-function ContactItem({ icon, label, className, textClassName }: Contact) {
-  return (
-    <div className="flex min-w-0 items-center gap-3">
-      <span className={className}>
-        <Image src={icon} alt="" width={32} height={32} className="size-7" />
-      </span>
-      <span
-        className={`min-w-0 text-2xl leading-tight font-bold tracking-normal sm:text-3xl md:text-[1.75rem] ${textClassName}`}
-      >
-        {label}
-      </span>
-    </div>
-  )
-}
-
-const HERO_FEATURES: { title: string; icon: LucideIcon }[] = [
-  { title: "บริการโดยช่างมืออาชีพ", icon: ShieldCheck },
-  { title: "เย็นเร็ว ประหยัดไฟ", icon: Snowflake },
-  { title: "ติดตั้งมาตรฐาน ทุกขั้นตอน", icon: Wrench },
-]
-
-function FeatureItem({
-  title,
-  icon: Icon,
-}: {
-  title: string
-  icon: LucideIcon
-}) {
-  return (
-    <li className="flex min-w-0 items-center gap-3 text-sm font-medium text-slate-500 sm:text-base lg:text-xl">
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-sky-100/60 text-primary shadow-sm ring-1 ring-primary/10">
-        <Icon className="size-6" strokeWidth={1.9} aria-hidden />
-      </span>
-      <span className="min-w-0 leading-snug">{title}</span>
-    </li>
-  )
-}
-
 export function Hero({ home }: { home: HomePage | null }) {
   const image = mediaUrl(home?.heroImage)
-  const contacts: Contact[] = []
+  const contacts: HeroContact[] = []
 
   if (home?.lineId) {
     contacts.push({
@@ -101,18 +63,61 @@ export function Hero({ home }: { home: HomePage | null }) {
           {contacts.length > 0 && (
             <div className="flex flex-row flex-wrap items-center gap-x-6 gap-y-4 text-[#2297e8] sm:gap-x-10">
               {contacts.map((contact) => (
-                <ContactItem key={contact.label} {...contact} />
+                <HeroContactItem key={contact.label} {...contact} />
               ))}
             </div>
           )}
 
           <ul className="mt-4 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8 sm:gap-y-4 lg:mt-8 lg:gap-x-10">
             {HERO_FEATURES.map((feature) => (
-              <FeatureItem key={feature.title} {...feature} />
+              <HeroFeatureItem key={feature.title} {...feature} />
             ))}
           </ul>
         </div>
       </div>
     </section>
+  )
+}
+
+const HERO_FEATURES: { title: string; icon: LucideIcon }[] = [
+  { title: "บริการโดยช่างมืออาชีพ", icon: ShieldCheck },
+  { title: "เย็นเร็ว ประหยัดไฟ", icon: Snowflake },
+  { title: "ติดตั้งมาตรฐาน ทุกขั้นตอน", icon: Wrench },
+]
+
+function HeroContactItem({
+  icon,
+  label,
+  className,
+  textClassName,
+}: HeroContact) {
+  return (
+    <div className="flex min-w-0 items-center gap-3">
+      <span className={className}>
+        <Image src={icon} alt="" width={32} height={32} className="size-7" />
+      </span>
+      <span
+        className={`min-w-0 text-2xl leading-tight font-bold tracking-normal sm:text-3xl md:text-[1.75rem] ${textClassName}`}
+      >
+        {label}
+      </span>
+    </div>
+  )
+}
+
+function HeroFeatureItem({
+  title,
+  icon: Icon,
+}: {
+  title: string
+  icon: LucideIcon
+}) {
+  return (
+    <li className="flex min-w-0 items-center gap-3 text-sm font-medium text-slate-500 sm:text-base lg:text-xl">
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-sky-100/60 text-primary shadow-sm ring-1 ring-primary/10">
+        <Icon className="size-6" strokeWidth={1.9} aria-hidden />
+      </span>
+      <span className="min-w-0 leading-snug">{title}</span>
+    </li>
   )
 }
