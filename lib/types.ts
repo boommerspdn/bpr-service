@@ -43,6 +43,7 @@ export type EcoGrade =
   | "5_3stars"
   | "5_2stars"
   | "5_1star"
+  | "5_0star"
 
 export interface Brand {
   id: number

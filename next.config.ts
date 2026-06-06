@@ -8,9 +8,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
     remotePatterns: [new URL(`${strapiUrl}/uploads/**`)],
-    // Strapi runs on localhost in dev; Next.js blocks private IPs by default.
-    dangerouslyAllowLocalIP: process.env.NODE_ENV !== "production",
   },
+  allowedDevOrigins: ['192.168.1.5'],
 }
 
 export default nextConfig

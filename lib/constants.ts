@@ -49,10 +49,10 @@ export function getActiveServiceTypes(brand: Brand) {
   )
 }
 
-/** Top navigation items. Non-home routes are placeholder pages for now. */
+/** Top navigation items. */
 export const NAV_ITEMS: { label: string; href: string }[] = [
   { label: "หน้าแรก", href: "/" },
+  { label: "แบรนด์สินค้า", href: "/brands" },
   { label: "ผลงานของเรา", href: "/works" },
   { label: "ติดต่อเรา", href: "/contact" },
-  { label: "เกี่ยวกับเรา", href: "/about" },
 ]

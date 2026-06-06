@@ -1,6 +1,6 @@
-import type { Spec } from "@/lib/types"
-import { Badge } from "@/components/ui/badge"
-import { StarRating } from "@/components/star-rating"
+import Image from "next/image"
+
+import type { EcoGrade, Spec } from "@/lib/types"
 import {
   Table,
   TableBody,
@@ -20,16 +20,27 @@ export function SpecsTable({ specs }: { specs: Spec[] }) {
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border">
+    <div className="rounded-xl border">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Model</TableHead>
             <TableHead className="text-right">BTU</TableHead>
-            <TableHead className="text-right">SEER</TableHead>
-            <TableHead className="text-center">เบอร์ 5</TableHead>
-            <TableHead className="text-center">ดาว</TableHead>
-            <TableHead className="text-right">ราคาพร้อมติดตั้ง</TableHead>
+            <TableHead className="hidden text-right md:table-cell">
+              SEER
+            </TableHead>
+            <TableHead className="text-center">
+              ฉลาก
+            </TableHead>
+            <TableHead className="text-right">
+              <div className="flex flex-col items-end gap-0.5">
+                <span className="md:hidden">ราคา</span>
+                <span className="hidden md:inline">ราคาสุทธิรวมติดตั้ง</span>
+                <span className="hidden text-xs font-normal text-muted-foreground md:inline">
+                  รวมบริการมาตรฐานแล้ว
+                </span>
+              </div>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -41,24 +52,18 @@ export function SpecsTable({ specs }: { specs: Spec[] }) {
               <TableCell className="text-right tabular-nums">
                 {spec.btu != null ? spec.btu.toLocaleString("th-TH") : "-"}
               </TableCell>
-              <TableCell className="text-right tabular-nums">
+              <TableCell className="hidden text-right tabular-nums md:table-cell">
                 {spec.seer ?? "-"}
               </TableCell>
-              <TableCell className="text-center tabular-nums">5</TableCell>
               <TableCell>
                 <div className="flex justify-center">
-                  <StarRating grade={spec.ecoGrade} />
+                  <EnergyGradeIcon grade={spec.ecoGrade} />
                 </div>
               </TableCell>
               <TableCell className="text-right">
-                <div className="flex flex-col items-end gap-1">
-                  <span className="font-semibold text-destructive">
-                    {formatBaht(spec.price)} บาท
-                  </span>
-                  <Badge variant="destructive" className="font-normal">
-                    ฟรีทุกอย่าง
-                  </Badge>
-                </div>
+                <span className="font-semibold text-destructive">
+                  {formatBaht(spec.price)} บาท
+                </span>
               </TableCell>
             </TableRow>
           ))}
@@ -71,4 +76,26 @@ export function SpecsTable({ specs }: { specs: Spec[] }) {
 function formatBaht(value: number | null | undefined): string {
   if (value == null) return "-"
   return value.toLocaleString("th-TH")
+}
+
+function EnergyGradeIcon({ grade }: { grade?: EcoGrade | null }) {
+  if (!grade) {
+    return <span className="text-muted-foreground">-</span>
+  }
+
+  const stars = energyStarCount(grade)
+
+  return (
+    <Image
+      src={`/egat/${stars}.png`}
+      alt={`ฉลากประหยัดไฟเบอร์ 5 ${stars} ดาว`}
+      width={40}
+      height={40}
+      className="size-10 object-contain"
+    />
+  )
+}
+
+function energyStarCount(grade: EcoGrade): number {
+  return Number(grade.match(/\d(?=star)/)?.[0] ?? 0)
 }

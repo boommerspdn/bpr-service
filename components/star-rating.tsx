@@ -49,4 +49,5 @@ const ECO_GRADE_STARS: Record<EcoGrade, number> = {
   "5_3stars": 3,
   "5_2stars": 2,
   "5_1star": 1,
+  "5_0star": 0,
 }

@@ -45,12 +45,6 @@ export function SiteFooter({ home }: { home: HomePage | null }) {
         <div>
           <h2 className="text-sm font-semibold text-foreground">เมนู</h2>
           <nav className="mt-4 grid gap-2 text-sm">
-            <Link
-              href="/products"
-              className="text-muted-foreground transition-colors hover:text-primary"
-            >
-              สินค้า / เลือกแบรนด์
-            </Link>
             {NAV_ITEMS.filter((item) => item.href !== "/").map((item) => (
               <Link
                 key={item.href}

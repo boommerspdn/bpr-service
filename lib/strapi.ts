@@ -69,17 +69,6 @@ export const getBrand = cache(async (documentId: string): Promise<Brand | null> 
   )
 })
 
-/** Products belonging to a brand. */
-export const getProductsByBrand = cache(
-  async (brandDocumentId: string): Promise<Product[]> => {
-    return fetchList<Product>(
-      `/bprservice-products?filters[brand][documentId][$eq]=${encodeURIComponent(
-        brandDocumentId
-      )}&populate=image&populate=specs&pagination[pageSize]=100`
-    )
-  }
-)
-
 /** Products belonging to a brand and AC unit type. */
 export const getProductsByBrandAndUnitType = cache(
   async (
@@ -93,28 +82,5 @@ export const getProductsByBrandAndUnitType = cache(
         unitType
       )}&populate=image&populate=specs&pagination[pageSize]=100`
     )
-  }
-)
-
-/** All products, used to enumerate static export paths. */
-export const getProducts = cache(async (): Promise<Product[]> => {
-  return fetchList<Product>(
-    "/bprservice-products?populate=image&populate=brand.logo&populate=specs&pagination[pageSize]=1000"
-  )
-})
-
-/** Stable static route param for product pages. */
-export function productRouteParam(product: Product): string {
-  return product.slug || product.documentId
-}
-
-/** A single product by route param. Accepts either slug or documentId. */
-export const getProductByRouteParam = cache(
-  async (param: string): Promise<Product | null> => {
-    const encodedParam = encodeURIComponent(param)
-    const products = await fetchList<Product>(
-      `/bprservice-products?filters[$or][0][slug][$eq]=${encodedParam}&filters[$or][1][documentId][$eq]=${encodedParam}&populate=image&populate=brand.logo&populate=specs`
-    )
-    return products[0] ?? null
   }
 )
