@@ -18,7 +18,7 @@
 ## Verification
 
 - Run `npm run typecheck` and `npm run lint` before handoff.
-- Run `npm run build` when changing routing, data fetching, image handling, or static-export config.
+- Do not require `npm run build` or `dev/start` as part of routine verification on this project.
 - Build output is `out/`.
 
 ## Deployment

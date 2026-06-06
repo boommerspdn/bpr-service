@@ -33,9 +33,9 @@ export interface StrapiListResponse<T> {
 
 export type UnitType =
   | "wall_unit"
-  | "floor_unit"
-  | "ceiling_cassette"
   | "hanging_unit"
+  | "ceiling_cassette"
+  | "floor_unit"
 
 export type EcoGrade =
   | "5_5stars"
@@ -98,4 +98,10 @@ export interface HomePage {
   phoneNumber?: string | null
   heroImage?: StrapiMedia | null
   features?: Feature[]
+}
+
+export interface WorksPage {
+  id: number
+  documentId: string
+  images?: StrapiMedia[] | null
 }

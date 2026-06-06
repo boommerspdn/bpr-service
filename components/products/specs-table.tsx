@@ -34,8 +34,7 @@ export function SpecsTable({ specs }: { specs: Spec[] }) {
             </TableHead>
             <TableHead className="text-right">
               <div className="flex flex-col items-end gap-0.5">
-                <span className="md:hidden">ราคา</span>
-                <span className="hidden md:inline">ราคาสุทธิรวมติดตั้ง</span>
+                <span>ราคารวมติดตั้ง</span>
                 <span className="hidden text-xs font-normal text-muted-foreground md:inline">
                   รวมบริการมาตรฐานแล้ว
                 </span>

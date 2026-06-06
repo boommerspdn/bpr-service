@@ -5,6 +5,7 @@ import type {
   Brand,
   HomePage,
   Product,
+  WorksPage,
   StrapiListResponse,
   StrapiSingleResponse,
   UnitType,
@@ -55,10 +56,17 @@ export const getHomePage = cache(async (): Promise<HomePage | null> => {
   )
 })
 
-/** All brands for the homepage grid, sorted by name. */
+/** Works singleton: gallery images only. */
+export const getWorksPage = cache(async (): Promise<WorksPage | null> => {
+  return fetchSingle<WorksPage>(
+    "/bprservice-works-page?populate[images]=true"
+  )
+})
+
+/** All brands for the homepage grid, sorted by CMS sort order. */
 export const getBrands = cache(async (): Promise<Brand[]> => {
   return fetchList<Brand>(
-    "/bprservice-brands?populate=logo&pagination[pageSize]=100&sort=name:asc"
+    "/bprservice-brands?populate=logo&pagination[pageSize]=100&sort=sortOrder:asc"
   )
 })
 

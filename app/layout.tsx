@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Geist_Mono, Noto_Sans_Thai } from "next/font/google"
 
 import "./globals.css"
+import "react-photo-album/columns.css"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { getHomePage } from "@/lib/strapi"
