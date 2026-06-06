@@ -87,21 +87,50 @@ export interface Feature {
   icon?: StrapiMedia | null
 }
 
-export interface HomePage {
+export interface Layout {
   id: number
   documentId: string
   logo?: StrapiMedia | null
+  lineId?: string | null
+  phoneNumber?: string | null
+  address?: string | null
+  googleMapEmbedSrc?: string | null
+}
+
+export type LayoutContact = Pick<Layout, "lineId" | "phoneNumber">
+
+export interface HomePage {
+  id: number
+  documentId: string
   heroTitle?: string | null
   heroSubtitle?: string | null
   ctaLabel?: string | null
-  lineId?: string | null
-  phoneNumber?: string | null
   heroImage?: StrapiMedia | null
   features?: Feature[]
+  seo?: Seo | null
+}
+
+export interface Seo {
+  id?: number
+  title?: string | null
+  description?: string | null
+  /** Legacy field names kept as a compatibility fallback. */
+  metaTitle?: string | null
+  metaDescription?: string | null
+}
+
+export interface ContactPage {
+  id: number
+  documentId: string
+  subtitle: string
+  description: string
+  mapTitle: string
+  seo?: Seo | null
 }
 
 export interface WorksPage {
   id: number
   documentId: string
   images?: StrapiMedia[] | null
+  seo?: Seo | null
 }

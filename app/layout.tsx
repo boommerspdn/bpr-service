@@ -5,7 +5,8 @@ import "./globals.css"
 import "react-photo-album/columns.css"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
-import { getHomePage } from "@/lib/strapi"
+import { DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_TITLE } from "@/lib/metadata"
+import { getSiteLayout } from "@/lib/strapi"
 import { cn } from "@/lib/utils"
 
 const notoSansThai = Noto_Sans_Thai({ subsets: ["thai", "latin"], variable: "--font-sans" })
@@ -16,8 +17,11 @@ const fontMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "BPR Service - ศูนย์บริการแอร์คุณภาพ",
-  description: "ราคารวมติดตั้ง ประหยัดไฟ รับประกัน บริการโดยช่างมืออาชีพ",
+  title: {
+    default: DEFAULT_SITE_TITLE,
+    template: `%s | BPR Service`,
+  },
+  description: DEFAULT_SITE_DESCRIPTION,
 }
 
 export default async function RootLayout({
@@ -25,7 +29,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const home = await getHomePage()
+  const siteLayout = await getSiteLayout()
 
   return (
     <html
@@ -39,9 +43,9 @@ export default async function RootLayout({
     >
       <body>
         <div className="flex min-h-svh flex-col">
-          <SiteHeader logo={home?.logo} />
+          <SiteHeader logo={siteLayout?.logo} />
           <div className="flex-1">{children}</div>
-          <SiteFooter home={home} />
+          <SiteFooter siteLayout={siteLayout} />
         </div>
       </body>
     </html>

@@ -2,7 +2,7 @@ import Image from "next/image"
 import { ShieldCheck, Snowflake, Wrench, type LucideIcon } from "lucide-react"
 
 import { mediaUrl } from "@/lib/media"
-import type { HomePage } from "@/lib/types"
+import type { HomePage, LayoutContact } from "@/lib/types"
 
 type HeroContact = {
   icon: string
@@ -11,24 +11,30 @@ type HeroContact = {
   textClassName: string
 }
 
-export function Hero({ home }: { home: HomePage | null }) {
+export function Hero({
+  home,
+  contact,
+}: {
+  home: HomePage | null
+  contact: LayoutContact | null
+}) {
   const image = mediaUrl(home?.heroImage)
   const contacts: HeroContact[] = []
 
-  if (home?.lineId) {
+  if (contact?.lineId) {
     contacts.push({
       icon: "/icons/line.svg",
-      label: home.lineId,
+      label: contact.lineId,
       className:
         "flex size-12 shrink-0 items-center justify-center rounded-xl bg-[#06C755] text-white sm:size-14 [&_img]:brightness-0 [&_img]:invert",
       textClassName: "text-[#13bf51]",
     })
   }
 
-  if (home?.phoneNumber) {
+  if (contact?.phoneNumber) {
     contacts.push({
       icon: "/icons/phone-call.svg",
-      label: home.phoneNumber,
+      label: contact.phoneNumber,
       className:
         "flex size-12 shrink-0 items-center justify-center rounded-full bg-[#2297e8] text-white sm:size-14 [&_img]:brightness-0 [&_img]:invert",
       textClassName: "text-[#2297e8]",

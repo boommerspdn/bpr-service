@@ -3,7 +3,10 @@ import { cache } from "react"
 import { API_URL, STRAPI_TOKEN } from "@/lib/env"
 import type {
   Brand,
+  ContactPage,
   HomePage,
+  Layout,
+  LayoutContact,
   Product,
   WorksPage,
   StrapiListResponse,
@@ -49,17 +52,38 @@ async function fetchList<T>(path: string): Promise<T[]> {
   return res?.data ?? []
 }
 
-/** Homepage singleton: hero + feature cards. */
+/** Layout singleton: header/footer contact data. */
+export const getSiteLayout = cache(async (): Promise<Layout | null> => {
+  return fetchSingle<Layout>(
+    "/bprservice-layout?fields[0]=lineId&fields[1]=phoneNumber&fields[2]=address&fields[3]=googleMapEmbedSrc&populate[logo]=true"
+  )
+})
+
+/** Layout singleton: homepage hero contact data only. */
+export const getHeroContact = cache(async (): Promise<LayoutContact | null> => {
+  return fetchSingle<LayoutContact>(
+    "/bprservice-layout?fields[0]=lineId&fields[1]=phoneNumber"
+  )
+})
+
+/** Homepage singleton: hero copy/image + feature cards. */
 export const getHomePage = cache(async (): Promise<HomePage | null> => {
   return fetchSingle<HomePage>(
-    "/bprservice-home-page?populate[logo]=true&populate[heroImage]=true&populate[features][populate]=icon"
+    "/bprservice-home-page?fields[0]=heroTitle&fields[1]=heroSubtitle&populate[heroImage]=true&populate[features][populate]=icon&populate[seo]=true"
+  )
+})
+
+/** Contact singleton: page copy + SEO metadata. */
+export const getContactPage = cache(async (): Promise<ContactPage | null> => {
+  return fetchSingle<ContactPage>(
+    "/bprservice-contact-page?fields[0]=subtitle&fields[1]=description&fields[2]=mapTitle&populate[seo]=true"
   )
 })
 
 /** Works singleton: gallery images only. */
 export const getWorksPage = cache(async (): Promise<WorksPage | null> => {
   return fetchSingle<WorksPage>(
-    "/bprservice-works-page?populate[images]=true"
+    "/bprservice-works-page?populate[images]=true&populate[seo]=true"
   )
 })
 

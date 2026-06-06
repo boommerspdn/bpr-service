@@ -1,6 +1,19 @@
+import type { Metadata } from "next"
+
 import { WorksGallery } from "@/components/works/works-gallery"
 import { getWorksPage } from "@/lib/strapi"
 import { mediaUrl, toMediaArray } from "@/lib/media"
+import { seoMetadata } from "@/lib/metadata"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const works = await getWorksPage()
+
+  return seoMetadata(works?.seo, {
+    title: "ผลงานของเรา",
+    description:
+      "ชมผลงานติดตั้ง ซ่อม และดูแลเครื่องปรับอากาศโดยทีมช่าง BPR Service",
+  })
+}
 
 export default async function WorksPage() {
   const works = await getWorksPage()

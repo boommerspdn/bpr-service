@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -37,6 +38,29 @@ export async function generateStaticParams() {
       type: key,
     }))
   )
+}
+
+export async function generateMetadata({
+  params,
+}: BrandTypeProductsPageProps): Promise<Metadata> {
+  const { id, type } = await params
+
+  if (!isUnitType(type)) {
+    return {
+      title: "สินค้าแอร์",
+      description: "เลือกดูสินค้าเครื่องปรับอากาศจาก BPR Service",
+    }
+  }
+
+  const brand = await getBrand(id)
+  const unitTypeLabel = UNIT_TYPE_LABEL[type]
+
+  return {
+    title: brand ? `สินค้า ${brand.name} - ${unitTypeLabel}` : "สินค้าแอร์",
+    description: brand
+      ? `เลือกดูสินค้าแอร์ ${brand.name} ประเภท${unitTypeLabel} จาก BPR Service`
+      : "เลือกดูสินค้าเครื่องปรับอากาศจาก BPR Service",
+  }
 }
 
 export default async function BrandTypeProductsPage({

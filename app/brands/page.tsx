@@ -1,5 +1,12 @@
+import type { Metadata } from "next"
+
 import { BrandGrid } from "@/components/home/brand-grid"
 import { getBrands } from "@/lib/strapi"
+
+export const metadata: Metadata = {
+  title: "เลือกแบรนด์",
+  description: "เลือกแบรนด์และประเภทแอร์เพื่อดูสินค้าทั้งหมดจาก BPR Service",
+}
 
 export default async function BrandsPage() {
   const brands = await getBrands()
