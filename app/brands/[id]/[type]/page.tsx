@@ -15,7 +15,13 @@ import {
   getBrands,
   getProductsByBrandAndUnitType,
 } from "@/lib/strapi"
+import { seoMetadata } from "@/lib/metadata"
 import type { Product, UnitType } from "@/lib/types"
+import {
+  JsonLd,
+  breadcrumbJsonLd,
+  productItemListJsonLd,
+} from "@/lib/structured-data"
 import { ProductGallery } from "@/components/products/product-gallery"
 import { SpecsTable } from "@/components/products/specs-table"
 
@@ -44,23 +50,46 @@ export async function generateMetadata({
   params,
 }: BrandTypeProductsPageProps): Promise<Metadata> {
   const { id, type } = await params
+  const path = `/brands/${id}/${type}`
 
   if (!isUnitType(type)) {
-    return {
-      title: "สินค้าแอร์",
-      description: "เลือกดูสินค้าเครื่องปรับอากาศจาก BPR Service",
-    }
+    return seoMetadata(
+      null,
+      {
+        title: "สินค้าแอร์",
+        description: "เลือกดูสินค้าเครื่องปรับอากาศจาก BPR Service",
+      },
+      {
+        path,
+      }
+    )
   }
 
-  const brand = await getBrand(id)
+  const [brand, products] = await Promise.all([
+    getBrand(id),
+    getProductsByBrandAndUnitType(id, type),
+  ])
   const unitTypeLabel = UNIT_TYPE_LABEL[type]
+  const firstProductImage = products
+    .flatMap((product) => toMediaArray(product.image))
+    .map((image) => mediaUrl(image))
+    .find((url): url is string => Boolean(url))
 
-  return {
-    title: brand ? `สินค้า ${brand.name} - ${unitTypeLabel}` : "สินค้าแอร์",
-    description: brand
-      ? `เลือกดูสินค้าแอร์ ${brand.name} ประเภท${unitTypeLabel} จาก BPR Service`
-      : "เลือกดูสินค้าเครื่องปรับอากาศจาก BPR Service",
-  }
+  return seoMetadata(
+    null,
+    {
+      title: brand
+        ? `แอร์ ${brand.name} ${unitTypeLabel} - ราคาและติดตั้ง`
+        : "สินค้าแอร์",
+      description: brand
+        ? `เลือกดูแอร์ ${brand.name} ประเภท${unitTypeLabel} พร้อม BTU ฉลากประหยัดไฟ ราคา และบริการติดตั้งจาก BPR Service`
+        : "เลือกดูสินค้าเครื่องปรับอากาศจาก BPR Service",
+    },
+    {
+      path,
+      image: firstProductImage || mediaUrl(brand?.logo),
+    }
+  )
 }
 
 export default async function BrandTypeProductsPage({
@@ -78,9 +107,21 @@ export default async function BrandTypeProductsPage({
   if (!brand) notFound()
 
   const logo = mediaUrl(brand.logo)
+  const unitTypeLabel = UNIT_TYPE_LABEL[type]
+  const path = `/brands/${id}/${type}`
 
   return (
     <main className="container py-10">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "หน้าแรก", path: "/" },
+          { name: "แบรนด์สินค้า", path: "/brands" },
+          { name: `${brand.name} ${unitTypeLabel}`, path },
+        ])}
+      />
+      {products.length > 0 && (
+        <JsonLd data={productItemListJsonLd({ brand, products, path })} />
+      )}
       <Link
         href="/brands"
         className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
@@ -103,10 +144,11 @@ export default async function BrandTypeProductsPage({
         )}
         <div>
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            สินค้า {brand.name}
+            แอร์ {brand.name} {unitTypeLabel}
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {UNIT_TYPE_LABEL[type]}
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+            ดูรุ่นสินค้า BTU ฉลากประหยัดไฟ SEER และราคารวมติดตั้งสำหรับ
+            {unitTypeLabel} จาก BPR Service
           </p>
         </div>
       </div>

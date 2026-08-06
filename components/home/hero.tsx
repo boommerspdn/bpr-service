@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { ShieldCheck, Snowflake, Wrench, type LucideIcon } from "lucide-react"
+import { HandCoins, Calculator, Wrench, type LucideIcon } from "lucide-react"
 
 import { mediaUrl } from "@/lib/media"
 import type { HomePage, LayoutContact } from "@/lib/types"
@@ -86,9 +86,9 @@ export function Hero({
 }
 
 const HERO_FEATURES: { title: string; icon: LucideIcon }[] = [
-  { title: "บริการโดยช่างมืออาชีพ", icon: ShieldCheck },
-  { title: "เย็นเร็ว ประหยัดไฟ", icon: Snowflake },
-  { title: "ติดตั้งมาตรฐาน ทุกขั้นตอน", icon: Wrench },
+  { title: "จำหน่ายแอร์พร้อมติดตั้ง", icon: Wrench },
+  { title: "ราคารวมติดตั้งและรับประกันงาน", icon: HandCoins },
+  { title: "แนะนำ BTU ให้เหมาะกับพื้นที่", icon: Calculator },
 ]
 
 function HeroContactItem({

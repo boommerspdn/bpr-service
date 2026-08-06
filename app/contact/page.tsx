@@ -4,6 +4,7 @@ import { ExternalLink, MapPin, MessageCircle, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { seoMetadata } from "@/lib/metadata"
 import { getContactPage, getSiteLayout } from "@/lib/strapi"
+import { JsonLd, breadcrumbJsonLd } from "@/lib/structured-data"
 
 function lineHref(lineId: string) {
   return `https://line.me/R/ti/p/${encodeURIComponent(lineId)}`
@@ -54,12 +55,18 @@ function getGoogleMapEmbedSrc(value?: string | null) {
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getContactPage()
 
-  return seoMetadata(page?.seo, {
-    title: "ติดต่อเรา",
-    description:
-      page?.description ||
-      "ติดต่อ BPR Service สำหรับติดตั้ง ซ่อม และดูแลเครื่องปรับอากาศ",
-  })
+  return seoMetadata(
+    page?.seo,
+    {
+      title: "ติดต่อเรา",
+      description:
+        page?.description ||
+        "ติดต่อ BPR Service สำหรับจำหน่าย ติดตั้ง ซ่อม และดูแลเครื่องปรับอากาศ นัดหมายผ่านโทรศัพท์หรือ LINE",
+    },
+    {
+      path: "/contact",
+    }
+  )
 }
 
 export default async function ContactPage() {
@@ -82,6 +89,12 @@ export default async function ContactPage() {
 
   return (
     <main>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "หน้าแรก", path: "/" },
+          { name: "ติดต่อเรา", path: "/contact" },
+        ])}
+      />
       <section className="border-b bg-[#f4faff]">
         <div className="container py-12 md:py-16">
           <div className="max-w-3xl">
@@ -89,7 +102,7 @@ export default async function ContactPage() {
               ติดต่อเรา
             </h1>
             <p className="mt-4 text-lg font-medium text-primary">{subtitle}</p>
-            <p className="mt-4 max-w-2xl whitespace-pre-line leading-7 text-muted-foreground">
+            <p className="mt-4 max-w-2xl leading-7 whitespace-pre-line text-muted-foreground">
               {description}
             </p>
           </div>
@@ -116,7 +129,7 @@ export default async function ContactPage() {
                     <span className="block text-sm text-muted-foreground">
                       โทรศัพท์
                     </span>
-                    <span className="block break-words font-semibold text-foreground">
+                    <span className="block font-semibold break-words text-foreground">
                       {siteLayout.phoneNumber}
                     </span>
                   </span>
@@ -137,7 +150,7 @@ export default async function ContactPage() {
                     <span className="block text-sm text-muted-foreground">
                       LINE
                     </span>
-                    <span className="block break-words font-semibold text-foreground">
+                    <span className="block font-semibold break-words text-foreground">
                       {siteLayout.lineId}
                     </span>
                   </span>
@@ -153,7 +166,7 @@ export default async function ContactPage() {
                     <span className="block text-sm text-muted-foreground">
                       ที่อยู่
                     </span>
-                    <span className="block whitespace-pre-line break-words font-semibold leading-7 text-foreground">
+                    <span className="block leading-7 font-semibold break-words whitespace-pre-line text-foreground">
                       {siteLayout.address}
                     </span>
                   </span>
@@ -190,7 +203,7 @@ export default async function ContactPage() {
                   ยังไม่มีแผนที่ให้แสดง
                 </p>
                 {siteLayout?.address && (
-                  <p className="mt-2 whitespace-pre-line text-sm leading-6 text-muted-foreground">
+                  <p className="mt-2 text-sm leading-6 whitespace-pre-line text-muted-foreground">
                     {siteLayout.address}
                   </p>
                 )}

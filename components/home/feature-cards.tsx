@@ -60,7 +60,7 @@ function FeatureCard({
           {feature.title}
         </h3>
         {feature.description && (
-          <p className="text-sm leading-snug text-[#64748b] sm:text-[15px]">
+          <p className="text-sm leading-snug text-[#475569] sm:text-[15px]">
             {feature.description}
           </p>
         )}

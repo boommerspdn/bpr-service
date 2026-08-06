@@ -14,3 +14,15 @@ export const API_URL = `${STRAPI_URL}/api`
 
 /** Strapi API bearer token for authenticated requests. */
 export const STRAPI_TOKEN = process.env.STRAPI_TOKEN ?? ""
+
+const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL
+
+/**
+ * Public site origin used for canonical URLs, sitemap entries, and structured
+ * data. Set NEXT_PUBLIC_SITE_URL in production; localhost keeps local builds
+ * functional when the value is omitted.
+ */
+export const SITE_URL = (rawSiteUrl || "http://localhost:3000").replace(
+  /\/$/,
+  ""
+)

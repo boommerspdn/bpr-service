@@ -9,6 +9,7 @@ Create `.env` from `.env.example` and point it at Strapi:
 
 ```bash
 NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 STRAPI_TOKEN=your-strapi-api-token-here
 ```
 
@@ -30,6 +31,8 @@ npm run build
 Important constraints:
 
 - Strapi must be reachable during the build.
+- Set `NEXT_PUBLIC_SITE_URL` to the public website origin before production
+  builds so canonical URLs, robots, sitemap, and structured data are correct.
 - Dynamic pages must be enumerable with `generateStaticParams()`.
 - Strapi media URLs must remain browser-accessible after deployment, unless you
   mirror media separately.
