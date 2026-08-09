@@ -3,6 +3,7 @@ import { ImageResponse } from "next/og"
 import { mediaUrl } from "@/lib/media"
 import { getSiteLayout } from "@/lib/strapi"
 
+export const dynamic = "force-static"
 export const size = { width: 64, height: 64 }
 export const contentType = "image/png"
 
