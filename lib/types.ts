@@ -91,6 +91,7 @@ export interface Layout {
   id: number
   documentId: string
   logo?: StrapiMedia | null
+  favicon?: StrapiMedia | null
   lineId?: string | null
   phoneNumber?: string | null
   address?: string | null

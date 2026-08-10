@@ -42,6 +42,7 @@ export function JsonLd({ data }: { data: JsonValue }) {
 
 export function localBusinessJsonLd(siteLayout: Layout | null) {
   const logo = mediaUrl(siteLayout?.logo)
+  const favicon = mediaUrl(siteLayout?.favicon)
 
   return {
     "@context": "https://schema.org",
@@ -49,7 +50,7 @@ export function localBusinessJsonLd(siteLayout: Layout | null) {
     name: SITE_NAME,
     url: siteUrl("/"),
     logo,
-    image: logo,
+    image: favicon,
     telephone: siteLayout?.phoneNumber || undefined,
     address: siteLayout?.address
       ? {
