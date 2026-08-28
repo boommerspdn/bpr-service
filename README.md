@@ -9,7 +9,7 @@ Create `.env` from `.env.example` and point it at Strapi:
 
 ```bash
 NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_URL=http://localhost:3002
 STRAPI_TOKEN=your-strapi-api-token-here
 ```
 
@@ -18,6 +18,8 @@ Run the app:
 ```bash
 npm run dev
 ```
+
+The app runs at `http://localhost:3002`.
 
 ## Static Export
 
@@ -36,6 +38,8 @@ Important constraints:
 - Dynamic pages must be enumerable with `generateStaticParams()`.
 - Strapi media URLs must remain browser-accessible after deployment, unless you
   mirror media separately.
+- `npm run typecheck` runs `next typegen` before `tsc --noEmit` so Next 16
+  route types are present.
 
 ## Deploy To Apache Over SCP
 
@@ -63,3 +67,8 @@ To use the components in your app, import them as follows:
 ```tsx
 import { Button } from "@/components/ui/button"
 ```
+
+## Project Documentation
+
+- `docs/PROJECT.md` describes this frontend's source layout, Strapi domain, and verification workflow.
+- `../strapi-global/docs/domains/bprservice.md` documents the BPRService CMS fields.

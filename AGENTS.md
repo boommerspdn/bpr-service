@@ -1,11 +1,19 @@
 # BPR Service Agent Notes
 
+<!-- BEGIN:nextjs-agent-rules -->
+# This is NOT the Next.js you know
+
+This version has breaking changes - APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+<!-- END:nextjs-agent-rules -->
+
 ## Project Shape
 
 - Next.js app router project using TypeScript, Tailwind CSS, and shadcn/ui primitives.
 - Content comes from Strapi REST APIs at build time.
 - The deployed artifact is static HTML/assets from `next build` with `output: "export"`.
 - The generated `out/` directory is copied to a VPS Apache document root over `scp`.
+- Dev port is `3002`.
+- This app owns the `bprservice-*` Strapi API domain in `../strapi-global`.
 
 ## Static Export Rules
 
@@ -20,6 +28,11 @@
 - Run `npm run typecheck` and `npm run lint` before handoff.
 - Do not require `npm run build` or `dev/start` as part of routine verification on this project.
 - Build output is `out/`.
+
+## Documentation
+
+- Read `docs/PROJECT.md` for the repo map.
+- Read `../strapi-global/docs/domains/bprservice.md` for field-level CMS notes.
 
 ## Deployment
 
