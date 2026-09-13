@@ -46,8 +46,10 @@ See `../strapi-global/docs/domains/bprservice.md` for field-level API notes.
 
 - The app is configured with `output: "export"` and `trailingSlash: true`.
 - Strapi data is fetched during build/server render through `lib/strapi.ts`.
+- Strapi network and non-2xx API failures should fail the static build; do not hide them behind route error files or fallback CMS data.
 - Keep dynamic paths enumerable with `generateStaticParams()` and set `dynamicParams = false` for static export routes.
 - Remote Strapi media must stay browser-accessible because images are unoptimized for static export.
+- Match `accounting-frontend` route-local naming: use `components` folders and kebab-case filenames.
 - Use `node_modules/next/dist/docs/` before Next 16 API changes; this repo already includes the agent warning.
 
 ## Verification

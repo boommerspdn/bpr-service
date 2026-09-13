@@ -34,7 +34,7 @@ export function JsonLd({ data }: { data: JsonValue }) {
       type="application/ld+json"
       suppressHydrationWarning
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(stripUndefined(data)),
+        __html: JSON.stringify(stripUndefined(data)).replace(/</g, "\\u003c"),
       }}
     />
   )

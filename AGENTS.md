@@ -22,6 +22,8 @@ This version has breaking changes - APIs, conventions, and file structure may al
 - Query-string driven server pages are not suitable for the exported site. Prefer real static paths such as `/brands/[id]` or `/products/[slug]`.
 - Remote Strapi images must work as plain browser URLs. `next/image` is configured with `unoptimized: true` because static export cannot use the Next image optimizer.
 - `NEXT_PUBLIC_STRAPI_URL` must point to a Strapi/media URL that remains reachable from users' browsers after deployment, unless media files are separately mirrored.
+- Match `accounting-frontend` error handling: do not add `app/error.tsx` or `app/global-error.tsx`; fail builds on Strapi network or non-2xx API failures.
+- Match `accounting-frontend` naming for route-local UI: use `components` folders and kebab-case filenames.
 
 ## Verification
 
