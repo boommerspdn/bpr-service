@@ -9,8 +9,8 @@ if (!rawStrapiUrl) {
 /** Strapi base URL, e.g. `http://localhost:1337` (no trailing slash). */
 export const STRAPI_URL = rawStrapiUrl.replace(/\/$/, "")
 
-/** Strapi REST API root, e.g. `http://localhost:1337/api`. */
-export const API_URL = `${STRAPI_URL}/api`
+/** CMS REST API root. Defaults to Strapi and can point at the WordPress compatibility API. */
+export const API_URL = `${STRAPI_URL}${process.env.NEXT_PUBLIC_CMS_API_PREFIX ?? "/api"}`
 
 /** Strapi API bearer token for authenticated requests. */
 export const STRAPI_TOKEN = process.env.STRAPI_TOKEN ?? ""
